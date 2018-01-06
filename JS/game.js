@@ -1,19 +1,49 @@
-class Square extends React.Component {
-  render() {
-    return (
-      <button className="square">
-        {/* TODO */}
+function Square(props){
+  return (
+    <button className = "square" onClick = {() => props.onClick()}>
+      {props.value}
       </button>
     );
   }
-}
+
+  /*
+  props is a parameter that stores argument passed   to the component. The return functions returns thee description of what needs to be rendered. React takes that description and renders it.
+  */
+
+  /*
+  => : new functionality in JS
+  */
+
+  /* after on click the square member is updated to new value which can be retrieved by calling value on props */
 
 class Board extends React.Component {
+  /* It is almost like creating a user defined html tag. It can be useful to avoid code repetition and can be used at multiple place in html. */
+  constructor(){
+    super();
+    this.state = {
+      squares: Array(9).fill(null),
+      xIsNext: true,
+    };
+  }
+  /* slice to copy the array */
+  handleClick(i){
+    const squares = this.state.squares.slice();
+    if(calculateWinner(squares) || squares[i]){
+      return;
+    }
+    squares[i] = this.state.xIsNext? 'X' : 'O';
+
+    this.setState({
+      squares: squares,
+      xIsNext: !this.state.xIsNext,
+    });
+  }
+  /* passing two props vaalue and function */
   renderSquare(i) {
-    return <Square />;
+    return <Square value = {this.state.squares[i]} onClick = {() => this.handleClick(i)} />;
   }
   render() {
-    const status = 'Next player: X';
+    const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     return (
       <div>
         <div className="status">{status}</div>
@@ -38,6 +68,13 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+
+  constructor(){
+    super();
+    this.state = {
+      /* TODO */
+    }
+  }
   render() {
     return (
       <div className="game">
@@ -45,7 +82,7 @@ class Game extends React.Component {
           <Board />
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
+          <div>{status}</div>
           <ol>{/* TODO */}</ol>
         </div>
       </div>
