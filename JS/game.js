@@ -3,13 +3,13 @@ function Square(props){
     <button className = "square" onClick = {() => props.onClick()}>
       {props.value}
       </button>
-    );
+    );  
   }
 
-  /*
-  props is a parameter that stores argument passed   to the component. The return functions returns thee description of what needs to be rendered. React takes that description and renders it.
+  /* 
+  props is a parameter that stores argument passed   to the component. The return functions returns thee description of what needs to be rendered. React takes that description and renders it. 
   */
-
+  
   /*
   => : new functionality in JS
   */
@@ -27,12 +27,13 @@ class Board extends React.Component {
   }
   /* slice to copy the array */
   handleClick(i){
-    const squares = this.state.squares.slice();
+    const squares = this.state.squares.slice(); /* Copy array */
+    
     if(calculateWinner(squares) || squares[i]){
       return;
     }
     squares[i] = this.state.xIsNext? 'X' : 'O';
-
+    
     this.setState({
       squares: squares,
       xIsNext: !this.state.xIsNext,
@@ -42,8 +43,17 @@ class Board extends React.Component {
   renderSquare(i) {
     return <Square value = {this.state.squares[i]} onClick = {() => this.handleClick(i)} />;
   }
-  render() {
-    const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+
+  render() {  
+   const winner = calculateWinner(this.state.squares);
+   let status;
+    
+    if(winner){
+      status = "Winner: " + winner;
+    }else{
+      status = "Next Player: " + (this.state.xIsNext? 'X' : 'O');
+    }
+
     return (
       <div>
         <div className="status">{status}</div>
@@ -68,7 +78,7 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
-
+  
   constructor(){
     super();
     this.state = {
